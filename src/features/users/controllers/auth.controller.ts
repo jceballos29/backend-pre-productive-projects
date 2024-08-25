@@ -53,7 +53,7 @@ class AuthController {
 			});
 			return this.httpResponse.Ok(res, { accessToken });
 		} catch (error) {
-			this.httpResponse.InternalServerError(res, error);
+			this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -83,8 +83,10 @@ class AuthController {
 			});
 			const newRefreshToken = this.service.generateId();
 
-			user.refreshToken = newRefreshToken;
-			await user.save();
+			await this.service.update(
+				{ _id: user._id },
+				{ refreshToken: newRefreshToken },
+			);
 
 			res.cookie('refreshToken', newRefreshToken, {
 				httpOnly: true,
@@ -94,7 +96,7 @@ class AuthController {
 			});
 			return this.httpResponse.Ok(res, { accessToken });
 		} catch (error) {
-			this.httpResponse.InternalServerError(res, error);
+			this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -110,8 +112,10 @@ class AuthController {
 				);
 			}
 
-			user.refreshToken = null;
-			await user.save();
+			await this.service.update(
+				{ _id: user._id },
+				{ refreshToken: null },
+			);
 
 			req.session.destroy((error) => {
 				if (error) {
@@ -121,7 +125,7 @@ class AuthController {
 				return this.httpResponse.NoContent(res);
 			});
 		} catch (error) {
-			this.httpResponse.InternalServerError(res, error);
+			this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -138,7 +142,7 @@ class AuthController {
 			}
 			return this.httpResponse.Ok(res, user);
 		} catch (error) {
-			this.httpResponse.InternalServerError(res, error);
+			this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 }

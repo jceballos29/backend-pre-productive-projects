@@ -13,7 +13,7 @@ class AreaController {
 			const area = await this.service.create(req.body);
 			return this.httpResponse.Created(res, area);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -25,7 +25,7 @@ class AreaController {
 			}
 			return this.httpResponse.Ok(res, area);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -52,7 +52,7 @@ class AreaController {
 			});
 			return this.httpResponse.Ok(res, { count, areas });
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -67,7 +67,7 @@ class AreaController {
 			}
 			return this.httpResponse.Ok(res, updatedArea);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -81,7 +81,7 @@ class AreaController {
 			}
 			return this.httpResponse.NoContent(res);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 }

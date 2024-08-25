@@ -28,6 +28,6 @@ async (req: Request, res: Response, next: NextFunction) => {
     logger.error('Validation Error', extractedErrors);
     return httpResponse.BadRequest(res, extractedErrors);
   } catch (error) {
-    return httpResponse.InternalServerError(res, error);
+    return httpResponse.InternalServerError(res, error as Error);
   }
 };

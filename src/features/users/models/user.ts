@@ -37,7 +37,7 @@ const userSchema = new Schema<UserDocument>(
 			select: false,
 		},
 		refreshToken: { type: String, default: null, select: false },
-		isActivated: { type: Boolean, default: false },
+		isActivated: { type: Boolean, default: false, select: false },
 		isAdmin: { type: Boolean, default: false, select: false },
 	},
 	{ timestamps: true, versionKey: false, collection: 'users' },

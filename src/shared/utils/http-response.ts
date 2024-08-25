@@ -88,8 +88,8 @@ class HttpResponse {
 	}
 
 	// Errores del Servidor
-	InternalServerError<E>(res: Response, error?: E): Response {
-		this.logger.error('Internal Server Error', error);
+	InternalServerError(res: Response, error?: Error | undefined): Response {
+		this.logger.error(error ? error.message :'Internal Server Error');
 		return res.status(HttpStatusCode.InternalServerError).json({
 			status: HttpStatusCode.InternalServerError,
 			statusText: 'Internal Server Error',

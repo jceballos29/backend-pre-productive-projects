@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { BaseRouter } from '../../shared/base';
-import { validate } from '../../shared/middleware';
-import AreaController from './controllers/area.controller';
+import { BaseRouter } from '../../../shared/base';
+import { validate } from '../../../shared/middleware';
+import AreaController from '../controllers/area.controller';
 import {
 	createAreaSchema,
 	deleteAreaSchema,
 	getManyAreasSchema,
 	getOneAreaSchema,
 	updateAreaSchema,
-} from './validations/area.validations';
+} from '../validations/area.validations';
 
 class AreaRoutes extends BaseRouter {
 	constructor(

@@ -22,7 +22,10 @@ export const authenticate = (
 		if (!decoded) {
 			return httpResponse.Unauthorized(res, 'Invalid access token');
 		}
-		if (!req.session.userId || req.session.userId !== decoded.sub) {
+		if (
+			!req.session.userId ||
+			req.session.userId.toString() !== decoded.sub
+		) {
 			return httpResponse.Unauthorized(res, 'Invalid access token');
 		}
 		req.session.role = decoded.role;
@@ -33,7 +36,7 @@ export const authenticate = (
 		} else if (error instanceof JsonWebTokenError) {
 			return httpResponse.Unauthorized(res, 'Invalid access token');
 		} else {
-			return httpResponse.InternalServerError(res, error);
+			return httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 };

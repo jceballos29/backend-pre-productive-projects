@@ -1,10 +1,20 @@
 import { Router } from 'express';
-import AreaRoutes from './areas';
-import UserRoutes from './users';
+
+import { authenticate, authorize } from '../shared/middleware';
+import AreaRoutes from './areas/routes/area.routes';
+import AuthRouts from './users/routes/auth.routes';
+import UserRoutes from './users/routes/user.routes';
+
+import { Role } from './users/models/user';
 
 const router = Router();
 
-router.use('/areas', new AreaRoutes().router);
-router.use('/users', new UserRoutes().router);
+router.use('/auth', new AuthRouts().router);
+router.use(
+	'/areas',
+	[authenticate, authorize([Role.ADMIN])],
+	new AreaRoutes().router,
+);
+router.use('/users', authenticate, new UserRoutes().router);
 
 export default router;

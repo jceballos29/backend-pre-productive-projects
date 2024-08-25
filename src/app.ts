@@ -9,7 +9,7 @@ import http, { Server } from 'http';
 import features from './features';
 import { Role } from './features/users/models/user';
 import { Database, Environment, Logger } from './shared/config';
-import { HttpResponse } from './shared/utils';
+import { HttpResponse, Password } from './shared/utils';
 
 const MongoDBStore = connectMongo(session);
 
@@ -31,6 +31,7 @@ class ServerBootstrap {
 		private readonly logger: Logger = new Logger(),
 		private readonly database: Database = new Database(),
 		private readonly httpResponse: HttpResponse = new HttpResponse(),
+		private readonly password: Password = new Password(),
 	) {
 		this.app = express();
 		this.app.set('port', this.env.get<number>('PORT'));
@@ -54,7 +55,9 @@ class ServerBootstrap {
 				if (!rootUser) {
 					await database.models.User.create({
 						email: this.env.get<string>('ROOT_EMAIL'),
-						password: this.env.get<string>('ROOT_PASSWORD'),
+						password: await this.password.hash(
+							this.env.get<string>('ROOT_PASSWORD'),
+						),
 						displayName: 'Root User',
 						role: Role.ADMIN,
 						isAdmin: true,
@@ -66,6 +69,7 @@ class ServerBootstrap {
 				}
 			}
 		} catch (error) {
+			console.log(error);
 			this.logger.error('Error creating root user', error);
 		}
 	}
@@ -119,7 +123,7 @@ class ServerBootstrap {
 			}
 			return this.httpResponse.InternalServerError(res, {
 				message: 'Health check failed',
-			});
+			} as Error);
 		});
 
 		this.app.use('/api', features);

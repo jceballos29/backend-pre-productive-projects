@@ -13,7 +13,7 @@ class UserController {
 			const user = await this.service.create(req.body);
 			return this.httpResponse.Created(res, user);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -25,7 +25,7 @@ class UserController {
 			}
 			return this.httpResponse.Ok(res, user);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -52,7 +52,7 @@ class UserController {
 			});
 			return this.httpResponse.Ok(res, { count, users });
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -67,7 +67,7 @@ class UserController {
 			}
 			return this.httpResponse.Ok(res, user);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 
@@ -79,7 +79,7 @@ class UserController {
 			}
 			return this.httpResponse.NoContent(res);
 		} catch (error) {
-			return this.httpResponse.InternalServerError(res, error);
+			return this.httpResponse.InternalServerError(res, error as Error);
 		}
 	}
 }

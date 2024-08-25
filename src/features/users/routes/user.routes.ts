@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { BaseRouter } from '../../shared/base';
-import { validate } from '../../shared/middleware';
-import UserController from './controllers/user.controller';
+import { BaseRouter } from '../../../shared/base';
+import { validate } from '../../../shared/middleware';
+import UserController from '../controllers/user.controller';
 import {
 	createUserSchema,
 	deleteUserSchema,
 	getManyUsersSchema,
 	getOneUserSchema,
 	updateUserSchema,
-} from './validations/user.validation';
+} from '../validations/user.validation';
 
 class UserRoutes extends BaseRouter {
 	constructor(

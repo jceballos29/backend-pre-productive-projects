@@ -26,13 +26,13 @@ class JsonWebToken {
 	public sign(payload: Payload): string {
 		return jwt.sign(payload, this.secret, {
 			expiresIn: this.expiration,
-			algorithm: 'RS256',
+			algorithm: 'HS256',
 		});
 	}
 
 	public verify(token: string): DecodedToken {
 		return jwt.verify(token, this.secret, {
-			algorithms: ['RS256'],
+			algorithms: ['HS256'],
 		}) as DecodedToken;
 	}
 }
