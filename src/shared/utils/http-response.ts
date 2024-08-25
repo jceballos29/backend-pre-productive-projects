@@ -1,12 +1,11 @@
 import { Response } from 'express';
+import { Logger } from '../config';
 import { HttpStatusCode } from '../types';
 
-export class HttpResponse {
-	Send<T>(
-		res: Response,
-		statusCode: number,
-		data: T,
-	): Response {
+class HttpResponse {
+	constructor(private readonly logger: Logger = new Logger()) {}
+
+	Send<T>(res: Response, statusCode: number, data: T): Response {
 		return res.status(statusCode).json({ data });
 	}
 
@@ -44,6 +43,7 @@ export class HttpResponse {
 
 	// Errores del Cliente
 	BadRequest<E>(res: Response, error?: E): Response {
+		this.logger.error('Bad Request', error);
 		return res.status(HttpStatusCode.BadRequest).json({
 			status: HttpStatusCode.BadRequest,
 			statusText: 'Bad Request',
@@ -52,6 +52,7 @@ export class HttpResponse {
 	}
 
 	Unauthorized<E>(res: Response, error?: E): Response {
+		this.logger.error('Unauthorized', error);
 		return res.status(HttpStatusCode.Unauthorized).json({
 			status: HttpStatusCode.Unauthorized,
 			statusText: 'Unauthorized',
@@ -60,6 +61,7 @@ export class HttpResponse {
 	}
 
 	Forbidden<E>(res: Response, error?: E): Response {
+		this.logger.error('Forbidden', error);
 		return res.status(HttpStatusCode.Forbidden).json({
 			status: HttpStatusCode.Forbidden,
 			statusText: 'Forbidden',
@@ -68,6 +70,7 @@ export class HttpResponse {
 	}
 
 	NotFound<E>(res: Response, error?: E): Response {
+		this.logger.error('Not Found', error);
 		return res.status(HttpStatusCode.NotFound).json({
 			status: HttpStatusCode.NotFound,
 			statusText: 'Not Found',
@@ -76,6 +79,7 @@ export class HttpResponse {
 	}
 
 	Conflict<E>(res: Response, error?: E): Response {
+		this.logger.error('Conflict', error);
 		return res.status(HttpStatusCode.Conflict).json({
 			status: HttpStatusCode.Conflict,
 			statusText: 'Conflict',
@@ -85,6 +89,7 @@ export class HttpResponse {
 
 	// Errores del Servidor
 	InternalServerError<E>(res: Response, error?: E): Response {
+		this.logger.error('Internal Server Error', error);
 		return res.status(HttpStatusCode.InternalServerError).json({
 			status: HttpStatusCode.InternalServerError,
 			statusText: 'Internal Server Error',
@@ -92,3 +97,5 @@ export class HttpResponse {
 		});
 	}
 }
+
+export default HttpResponse;

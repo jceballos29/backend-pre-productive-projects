@@ -1,4 +1,4 @@
-import mongoose from '../../../shared/config/database';
+import { Document, model, Schema } from "mongoose";
 
 export enum Role {
 	ADMIN = 'admin',
@@ -18,13 +18,13 @@ export interface User {
 	isAdmin: boolean;
 }
 
-export interface UserDocument extends User, mongoose.Document {
+export interface UserDocument extends User, Document {
 	_id: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-const userSchema = new mongoose.Schema<UserDocument>(
+const userSchema = new Schema<UserDocument>(
 	{
 		avatar: { type: String, default: null },
 		email: { type: String, required: true, unique: true },
@@ -43,6 +43,6 @@ const userSchema = new mongoose.Schema<UserDocument>(
 	{ timestamps: true, versionKey: false, collection: 'users' },
 );
 
-const UserModel = mongoose.model<UserDocument>('User', userSchema);
+const UserModel = model<UserDocument>('User', userSchema);
 
 export default UserModel;

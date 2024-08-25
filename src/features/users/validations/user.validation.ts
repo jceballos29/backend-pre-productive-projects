@@ -32,8 +32,8 @@ export const updateUserSchema = [
 	param('id')
 		.isString()
 		.withMessage('Id must be a string')
-		.isUUID()
-		.withMessage('Id must be a valid UUID'),
+		.isMongoId()
+		.withMessage('Id must be a valid Id'),
 	body('email')
 		.optional()
 		.isEmail()
@@ -70,16 +70,16 @@ export const deleteUserSchema = [
   param('id')
     .isString()
     .withMessage('Id must be a string')
-    .isUUID()
-    .withMessage('Id must be a valid UUID'),
+    .isMongoId()
+    .withMessage('Id must be a valid Id'),
 ];
 
 export const getOneUserSchema = [
   param('id')
     .isString()
     .withMessage('Id must be a string')
-    .isUUID()
-    .withMessage('Id must be a valid UUID'),
+    .isMongoId()
+    .withMessage('Id must be a valid Id'),
 ];
 
 export const getManyUsersSchema = [

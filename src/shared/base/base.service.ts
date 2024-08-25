@@ -1,10 +1,20 @@
-import mongoose from '../config/database';
+import {
+	Document,
+	FilterQuery,
+	Model,
+	ProjectionType,
+	QueryOptions,
+	Types,
+	PopulateOptions,
+	ClientSession,
+	UpdateQuery,
+} from 'mongoose';
 
-export abstract class BaseService<E, D extends mongoose.Document> {
-	constructor(protected model: mongoose.Model<D>) {}
+export abstract class BaseService<E, D extends Document> {
+	constructor(protected model: Model<D>) {}
 
 	generateId(): string {
-		return new mongoose.Types.ObjectId().toHexString();
+		return new Types.ObjectId().toHexString();
 	}
 
 	async create(data: E): Promise<D> {
@@ -12,10 +22,10 @@ export abstract class BaseService<E, D extends mongoose.Document> {
 	}
 
 	async findOne(
-		query: mongoose.FilterQuery<D>,
-		projection?: mongoose.ProjectionType<Partial<D> | string>,
-		options: mongoose.QueryOptions = { lean: true },
-		populates?: mongoose.PopulateOptions[],
+		query: FilterQuery<D>,
+		projection?: ProjectionType<Partial<D> | string>,
+		options: QueryOptions = { lean: true },
+		populates?: PopulateOptions[],
 	): Promise<Pick<D, keyof Partial<D>> | null> {
 		const queryBuilder = this.model.findOne(
 			query,
@@ -31,8 +41,8 @@ export abstract class BaseService<E, D extends mongoose.Document> {
 	}
 
 	async findAll(
-		query: mongoose.FilterQuery<D>,
-		projection?: mongoose.ProjectionType<Partial<D> | string>,
+		query: FilterQuery<D>,
+		projection?: ProjectionType<Partial<D> | string>,
 		options: {
 			all?: boolean;
 			lean?: boolean;
@@ -40,7 +50,7 @@ export abstract class BaseService<E, D extends mongoose.Document> {
 			limit?: number;
 			sort?: string;
 			order?: 'asc' | 'desc';
-			populate?: mongoose.PopulateOptions[];
+			populate?: PopulateOptions[];
 		} = { lean: true },
 	): Promise<Pick<D, keyof Partial<D>>[]> {
 		const queryBuilder = this.model.find(query, projection, options);
@@ -63,23 +73,23 @@ export abstract class BaseService<E, D extends mongoose.Document> {
 	}
 
 	async update(
-		query: mongoose.FilterQuery<D>,
-		update: mongoose.UpdateQuery<D>,
-		options: mongoose.QueryOptions = { new: true },
+		query: FilterQuery<D>,
+		update: UpdateQuery<D>,
+		options: QueryOptions = { new: true },
 	): Promise<D | null> {
 		return this.model.findOneAndUpdate(query, update, options).exec();
 	}
 
-	async delete(query: mongoose.FilterQuery<D>): Promise<D | null> {
+	async delete(query: FilterQuery<D>): Promise<D | null> {
 		return this.model.findOneAndDelete(query).exec();
 	}
 
-	async count(query: mongoose.FilterQuery<D>): Promise<number> {
+	async count(query: FilterQuery<D>): Promise<number> {
 		return this.model.countDocuments(query).exec();
 	}
 
 	protected async withTransaction<T>(
-		callback: (session: mongoose.ClientSession) => Promise<T>,
+		callback: (session: ClientSession) => Promise<T>,
 	): Promise<T> {
 		const session = await this.model.db.startSession();
 		session.startTransaction();

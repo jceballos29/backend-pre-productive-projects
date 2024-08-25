@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import AreaRoutes from './areas/routes/area.routes';
-import UserRoutes from './users/routes/user.routes';
+import AreaRoutes from './areas';
+import UserRoutes from './users';
 
 const router = Router();
 

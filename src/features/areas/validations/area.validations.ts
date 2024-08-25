@@ -4,8 +4,8 @@ export const getOneAreaSchema = [
 	param('id')
 		.isString()
 		.withMessage('Id must be a string')
-		.isUUID()
-		.withMessage('Id must be a valid UUID'),
+		.isMongoId()
+		.withMessage('Id must be a valid Id'),
 ];
 
 export const getManyAreasSchema = [
@@ -47,8 +47,8 @@ export const updateAreaSchema = [
 	param('id')
 		.isString()
 		.withMessage('Id must be a string')
-		.isUUID()
-		.withMessage('Id must be a valid UUID'),
+		.isMongoId()
+		.withMessage('Id must be a valid Id'),
 	body('name')
 		.isString()
 		.withMessage('Name must be a string')
@@ -60,8 +60,8 @@ export const deleteAreaSchema = [
 	param('id')
 		.isString()
 		.withMessage('Id must be a string')
-		.isUUID()
-		.withMessage('Id must be a valid UUID'),
+		.isMongoId()
+		.withMessage('Id must be a valid Id'),
 ];
 
 export type CreateAreaInput = {

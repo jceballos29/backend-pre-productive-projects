@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpResponse, verifyToken } from '../utils';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import { HttpResponse, JsonWebToken } from '../utils';
 
 export const authenticate = (
 	req: Request,
@@ -8,6 +8,8 @@ export const authenticate = (
 	next: NextFunction,
 ) => {
 	const httpResponse = new HttpResponse();
+	const jwt = new JsonWebToken();
+
 	const accessToken = req.headers.authorization?.replace(
 		'Bearer ',
 		'',
@@ -16,11 +18,10 @@ export const authenticate = (
 		return httpResponse.Unauthorized(res, 'Access token is required');
 	}
 	try {
-		const decoded = verifyToken(accessToken);
+		const decoded = jwt.verify(accessToken);
 		if (!decoded) {
 			return httpResponse.Unauthorized(res, 'Invalid access token');
 		}
-    
 		if (!req.session.userId || req.session.userId !== decoded.sub) {
 			return httpResponse.Unauthorized(res, 'Invalid access token');
 		}
