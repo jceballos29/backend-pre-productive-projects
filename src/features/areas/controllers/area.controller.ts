@@ -49,6 +49,7 @@ class AreaController {
 				limit: Number(limit),
 				sort: String(sort),
 				order: order as 'asc' | 'desc',
+				populate: [{ path: 'programs', select: 'name' }],
 			});
 			return this.httpResponse.Ok(res, { count, areas });
 		} catch (error) {
@@ -79,7 +80,7 @@ class AreaController {
 			if (!deletedArea) {
 				return this.httpResponse.NotFound(res, 'Area not found');
 			}
-			return this.httpResponse.NoContent(res);
+			return this.httpResponse.Ok(res, deletedArea);
 		} catch (error) {
 			return this.httpResponse.InternalServerError(res, error as Error);
 		}

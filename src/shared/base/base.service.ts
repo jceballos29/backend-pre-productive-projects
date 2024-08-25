@@ -23,20 +23,14 @@ export abstract class BaseService<E, D extends Document> {
 
 	async findOne(
 		query: FilterQuery<D>,
-		projection?: ProjectionType<Partial<D> | string>,
 		options: QueryOptions = { lean: true },
-		populates?: PopulateOptions[],
+		projection?: ProjectionType<Partial<D> | string>,
 	): Promise<Pick<D, keyof Partial<D>> | null> {
 		const queryBuilder = this.model.findOne(
 			query,
 			projection,
 			options,
 		);
-		if (populates) {
-			populates.forEach((populate) => {
-				queryBuilder.populate(populate);
-			});
-		}
 		return queryBuilder.exec();
 	}
 
@@ -80,15 +74,20 @@ export abstract class BaseService<E, D extends Document> {
 		return this.model.findOneAndUpdate(query, update, options).exec();
 	}
 
-	async delete(query: FilterQuery<D>): Promise<D | null> {
-		return this.model.findOneAndDelete(query).exec();
+	async delete(
+		query: FilterQuery<D>,
+		options: QueryOptions = {
+			lean: true,
+		},
+	): Promise<D | null> {
+		return this.model.findOneAndDelete(query, options).exec();
 	}
 
 	async count(query: FilterQuery<D>): Promise<number> {
 		return this.model.countDocuments(query).exec();
 	}
 
-	protected async withTransaction<T>(
+	async withTransaction<T>(
 		callback: (session: ClientSession) => Promise<T>,
 	): Promise<T> {
 		const session = await this.model.db.startSession();
